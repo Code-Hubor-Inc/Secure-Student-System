@@ -16,7 +16,12 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    
+    "test:coverage": "npm test -- --coverage --watchAll=false",
+    "test:integration": "react-script test --testPattern=\"integration\" --runInBand",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx"
   },
   "eslintConfig": {
     "extends": [
