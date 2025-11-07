@@ -1,3 +1,8 @@
+# GITHUB ACTIONS WORKFLOW: BACKEND CI
+# Main Purpose: To establish a comprehensive CI pipeline for a Python-based backend
+# application. This workflow includes multi-version testing, security scanning,
+# and Docker image building, ensuring code quality, security, and deployability.
+
 name: Backend CI
 
 on: 
@@ -6,14 +11,14 @@ on:
     paths: 
       - 'backend/**'
       - '.github/workflow/backend-ci.yml'
-    pull-request:
+  pull_request:
       branches: [ main, develop ]
       paths: 
         - 'backend/**'
 
 jobs:
   test:
-    name: BAckend Test
+    name: Backend Test
     runs-on: ubuntu-latest
 
     strategy:
@@ -108,7 +113,7 @@ jobs:
             backend/test-results.xml
           retention-days: 7
 
-    security-scan:
+  security-scan:
       name: Security scan
       runs-on: ubuntu-latest
 
@@ -127,10 +132,10 @@ jobs:
 
         - name: Install security tools
           run: |
-            pip install badnit safety pip-audit 
+            pip install bandit safety pip-audit 
 
         - name: Run bandit security scan
-          run:
+          run: |
             bandit -r app/ -f json -o bandit-results.json || true
 
         - name: Run safety check
@@ -146,7 +151,7 @@ jobs:
           with:
             name: backend-security-reports
             path: |
-              backend/bandit-reults.json
+              backend/bandit-results.json
               backend/safety-report.json    
               backend/pip-audit-report.json
             retention-days: 30

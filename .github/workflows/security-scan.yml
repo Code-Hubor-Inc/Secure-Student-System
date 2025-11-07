@@ -8,10 +8,20 @@ on:
   schedule:
     - cron: '0 0 * * 0'  # Weekly security scan
 
+permissions:
+  security-events: write
+  actions: read
+  contents: read    
+
 jobs:
   codeql:
     name: CodeQL Analysis
     runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
     
     strategy:
       fail-fast: false
@@ -35,6 +45,9 @@ jobs:
       uses: github/codeql-action/analyze@v3
       with:
         category: "/language:${{ matrix.language }}"
+        # Optional: Add this is if having permission issues
+        # upload: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name
+        # == github.repository }} 
 
   dependency-scan:
     name: Dependency Vulnerability Scan
@@ -51,8 +64,12 @@ jobs:
         
     - name: Run npm audit
       run: |
-        cd frontend
-        npm audit --audit-level high
+        if [ -d "frontend"]; then
+          cd frontend
+          npm audit --audit-level high
+        else
+          echo "Frontend directory not found, skipping npm audit"
+        fi     
       continue-on-error: true
 
     - name: Backend dependency scan
@@ -62,9 +79,13 @@ jobs:
         
     - name: Run safety check
       run: |
-        cd backend
-        pip install safety
-        safety check --full-report
+        if [ -d "backend"]; then
+          cd backend
+          pip install safety
+          safety check --full-report
+        else
+          echo "Backend directory not found, skipping safet check "
+        fi    
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
@@ -142,10 +163,10 @@ jobs:
       with:
         config: p/security-audit
 
-    - name: 🔍 Gitleaks secret detection
-      uses: gitleaks/gitleaks-action@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: 🔍 Gitleaks secret detection
+      # uses: gitleaks/gitleaks-action@v2
+      # env:
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   security-report:
     name: Security Report

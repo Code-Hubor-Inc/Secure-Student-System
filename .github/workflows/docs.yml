@@ -1,0 +1,21 @@
+# GITHUB ACTIONS WORKFLOW CONFIGURATION
+# Main Purpose: To automate the deployment of documentation (located in the docs/
+# directory) to GitHub Pages whenever changes are pushed to the main branch.
+# This ensures documentation is always up-to-date with the code.
+
+name: Deploy Documentation
+on:
+  push:
+    branches: [main]
+    paths: ['docs/**']
+
+jobs:
+  deploy-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
