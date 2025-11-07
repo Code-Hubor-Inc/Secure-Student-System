@@ -1,0 +1,19 @@
+# GITHUB ACTIONS WORKFLOW CONFIGURATION
+# Main Purpose: To automate the creation of a GitHub Release whenever a new
+# version tag (starting with 'v') is pushed to the repository. This is a common
+# pattern for Continuous Delivery (CD)
+
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
