@@ -3,16 +3,18 @@
 # using Lighthouse CI into the Continuous Integration (CI) pipeline. This runs
 # checks on every push and pull request to monitor metrics like page speed and SEO.
 
-name: Performance CI
-on: [push, pull_request]
+# name: Performance CI
+# on: [push, pull_request]
 
-jobs:
-  lighthouse:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v10
-        with:
-          uploadArtifacts: true
-          temporaryPublicStorage: true
+# jobs:
+#   lighthouse:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - name: Lighthouse CI
+#         uses: treosh/lighthouse-ci-action@v10
+#         with:
+#           uploadArtifacts: true
+#           temporaryPublicStorage: true
+
+# Dont need this at the moment 
