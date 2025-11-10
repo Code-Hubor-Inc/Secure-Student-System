@@ -1,0 +1,6 @@
+# Use latest compatible versions to avoid security issues
+legacy-peer-deps=true
+save-exact=true
+audit-level=high
+fund=false
+optional=false
